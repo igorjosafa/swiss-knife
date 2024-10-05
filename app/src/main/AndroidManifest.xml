@@ -27,7 +27,7 @@
         <activity android:name=".presentation.calculator.CalculatorActivity" />
         <activity android:name=".presentation.task.TaskActivity" />
         <activity android:name=".presentation.task.AddTaskActivity" />
-        <receiver android:name=".presentation.task.TaskBroadcastReceiver" />
+        <receiver android:name=".domain.task.TaskBroadcastReceiver" />
         <activity android:name=".presentation.task.UpdateTaskActivity"/>
         <activity android:name=".presentation.task.DeleteTaskActivity"/>
     </application>

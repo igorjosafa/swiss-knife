@@ -3,6 +3,7 @@ package com.example.swissknife.presentation.task
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -12,12 +13,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.swissknife.R
 import com.example.swissknife.data.task.DatabaseHelper
 import com.example.swissknife.domain.calculator.Add
 import com.example.swissknife.domain.task.Task
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 
 class TaskActivity : AppCompatActivity() {
@@ -32,51 +35,72 @@ class TaskActivity : AppCompatActivity() {
         taskViewModel.createDB(this)
         taskList = taskViewModel.loadTasks(emptyList())
 
-        taskList = taskList.sortedWith(compareBy(nullsLast()) { it.scheduleDate })
+        val groupedTasks = taskList.groupBy { it.scheduleDate }
 
         taskListContainer = findViewById(R.id.taskListContainer)
         taskListContainer.removeAllViews()
 
-        for (task in taskList) {
-            val horizontalLayout = LinearLayout(this)
-            val button = Button(this)
-            val delButton = ImageButton(this)
-
-            horizontalLayout.orientation = LinearLayout.HORIZONTAL
-            horizontalLayout.layoutParams = LinearLayout.LayoutParams(
+        for ((scheduleDate, tasks) in groupedTasks) {
+            val groupLayout = LinearLayout(this)
+            groupLayout.orientation = LinearLayout.VERTICAL
+            groupLayout.layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
+            groupLayout.setPadding(16, 16, 16, 16)
 
-            button.id = task.id
-            button.text = task.name
-            button.layoutParams = LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                1f
-            )
-            button.setOnClickListener {
-                val intent = Intent(this, UpdateTaskActivity::class.java)
-                intent.putExtra("id", task.id)
-                startActivity(intent)
+            val dateText = TextView(this).apply {
+                text = scheduleDate?.let {
+                    SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
+                } ?: "Sem data"
+                textSize = 18f
+                setTypeface(null, Typeface.BOLD)
             }
 
-            delButton.setImageResource(R.drawable.ic_delete)
-            delButton.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-            )
-            delButton.setOnClickListener {
-                val intent = Intent(this, DeleteTaskActivity::class.java)
-                intent.putExtra("id", task.id)
-                startActivity(intent)
-            }
+            groupLayout.addView(dateText)
 
-            horizontalLayout.addView(button)
-            horizontalLayout.addView(delButton)
-            taskListContainer.addView(horizontalLayout)
+            for (task in tasks) {
+                val horizontalLayout = LinearLayout(this)
+                val button = Button(this)
+                val delButton = ImageButton(this)
+
+                horizontalLayout.orientation = LinearLayout.HORIZONTAL
+                horizontalLayout.layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+
+                button.id = task.id
+                button.text = task.name
+                button.layoutParams = LinearLayout.LayoutParams(
+                    0,
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    1f
+                )
+                button.setOnClickListener {
+                    val intent = Intent(this, UpdateTaskActivity::class.java)
+                    intent.putExtra("id", task.id)
+                    startActivity(intent)
+                }
+
+                delButton.setImageResource(R.drawable.ic_delete)
+                delButton.layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+                delButton.setOnClickListener {
+                    val intent = Intent(this, DeleteTaskActivity::class.java)
+                    intent.putExtra("id", task.id)
+                    startActivity(intent)
+                }
+
+                horizontalLayout.addView(button)
+                horizontalLayout.addView(delButton)
+                groupLayout.addView(horizontalLayout)
 
             }
+            taskListContainer.addView(groupLayout)
+        }
 
         findViewById<Button>(R.id.addTaskButton).setOnClickListener {
             val intent = Intent(this, AddTaskActivity::class.java)

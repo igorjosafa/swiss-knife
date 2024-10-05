@@ -12,7 +12,6 @@ import android.os.Build
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.swissknife.presentation.task.TaskBroadcastReceiver
 import java.util.Date
 
 class DealWithNotifications {
@@ -45,7 +44,7 @@ class DealWithNotifications {
                 }
             }
             val intent = Intent(context, TaskBroadcastReceiver::class.java).apply {
-                putExtra(taskName, "taskName")
+                putExtra("taskName", taskName)
             }
             val pendingIntent = PendingIntent.getBroadcast(
                 context,

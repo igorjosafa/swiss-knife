@@ -1,23 +1,15 @@
-package com.example.swissknife.presentation.task
+package com.example.swissknife.domain.task
 
-import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.ContextCompat.startActivity
 import com.example.swissknife.MainActivity
 import com.example.swissknife.R
-import android.Manifest
-import android.provider.Settings
 
 class TaskBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -39,7 +31,7 @@ class TaskBroadcastReceiver : BroadcastReceiver() {
 
         val notificationBuilder = NotificationCompat.Builder(context, "task_notification_channel")
             .setContentTitle(intent.getStringExtra("taskName"))
-            .setContentText(intent.getStringExtra("taskName"))
+            .setContentText("Tarefa Agendada")
             .setSmallIcon(R.drawable.ic_launcher_foreground) // Ícone
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(notificationPendingIntent)
