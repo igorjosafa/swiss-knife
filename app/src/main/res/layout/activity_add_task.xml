@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/taskName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nome da tarefa" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <EditText
+        android:id="@+id/taskDescription"
+        android:layout_width="match_parent"
+        android:layout_height="259dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Descrição" />
+
+    <TextView
+        android:id="@+id/scheduleDate"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:backgroundTint="#A8A8A8"
+        android:ems="10"
+        android:hint="Data"
+        android:inputType="date" />
+
+    <TextView
+        android:id="@+id/notificatonTime"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:hint="Hora"
+        android:inputType="time" />
+
+    <Button
+        android:id="@+id/addTaskButton"
+        android:layout_width="384dp"
+        android:layout_height="80dp"
+        android:text="Adicionar" />
+
+
+</LinearLayout>
